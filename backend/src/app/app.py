@@ -1,23 +1,25 @@
-import os, sys
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
 
-# Define the path to your SQLite database
-basedir = os.path.abspath(os.path.dirname(__file__))
-rootdir = os.path.abspath(os.path.join(basedir, '..', '..', '..'))
-database_dir  = os.path.join(rootdir, 'database')
-database_path = os.path.join(database_dir, 'Sellers_Hub.db')
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + database_path
+def mypaths():
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    rootdir = os.path.abspath(os.path.join(basedir, '..', '..', '..'))
+    database_dir  = os.path.join(rootdir, 'database')
+    database_path = os.path.join(database_dir, 'Sellers_Hub.db')
+    return database_path
+db_path = mypaths()
+
+app = Flask(__name__)           # Flask application object
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize SQLAlchemy
-db = SQLAlchemy(app)
+db = SQLAlchemy(app)            # SQLAlchemy database object
+migrate = Migrate(app, db)      # Flask-Migrate object
 
-# Define your database models
 class Client(db.Model):
     client_CPF_ID = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
@@ -51,13 +53,9 @@ class Transaction(db.Model):
     client_CPF_ID = db.Column(db.Integer, db.ForeignKey('client.client_CPF_ID'))
 
 
-# Initialize Flask-Migrate
-migrate = Migrate(app, db)
-
 @app.route('/')
 def hello():
     return 'Hello, World!'
-
 
 @app.route('/test-db')
 def test_db():
@@ -67,8 +65,6 @@ def test_db():
         return f"Client name: {client.first_name} {client.last_name}"
     except Exception as e:
         return f"No client found in the databases"
-
-
 
 if __name__ == '__main__':
     with app.app_context():
