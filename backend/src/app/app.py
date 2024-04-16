@@ -3,7 +3,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
-from sqlalchemy import create_engine, text
 
 # Define the path to your SQLite database
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -25,6 +24,9 @@ class Client(db.Model):
     last_name = db.Column(db.String(50))
     phone_number = db.Column(db.String(20))
     email = db.Column(db.String(50))
+    physical_address = db.Column(db.String(100))
+    birthday = db.Column(db.Date)
+    additional_information = db.Column(db.Text)
 
 class Company(db.Model):
     company_CNPJ_ID = db.Column(db.Integer, primary_key=True)
@@ -71,26 +73,5 @@ def test_db():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-
-    # Create an engine to connect to your database
-    engine = create_engine('sqlite:///' + database_path)
-
-    # Establish a connection
-    connection = engine.connect()
-
-    # Execute the query
-    result = connection.execute(text("SELECT name FROM sqlite_master WHERE type='table' AND name='Client'"))
-
-    # Fetch the result
-    table_exists = result.fetchone() is not None
-
-    # Close the connection
-    connection.close()
-
-    # Print the result
-    if table_exists:
-        print("The table exists.")
-    else:
-        print("The table does not exist.")
 
     app.run(debug=True)

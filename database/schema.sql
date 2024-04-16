@@ -4,6 +4,9 @@ CREATE TABLE clients (
   last_name VARCHAR,
   phone_number INTEGER,
   email VARCHAR,
+  birthday DATETIME,
+  physical_address VARCHAR,
+  additional_information VARCHAR
 );
 
 CREATE TABLE company (
