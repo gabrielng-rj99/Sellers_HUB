@@ -1,10 +1,8 @@
 from directories import *
-add_dirs_to_sys_path()
-
 import os, sys
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Client
+from backend.src.app.models import Client
 
 # Create the engine to connect to the database
 engine = create_engine(f'sqlite:///{db_path}')
