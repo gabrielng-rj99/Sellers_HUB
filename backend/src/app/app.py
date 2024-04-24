@@ -1,57 +1,20 @@
-import os
+from directories import db_path, add_dirs_to_sys_path
+add_dirs_to_sys_path()
+
+import os, sys
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
+from database import db  # Import the db object from database.py
+from models import *  # Import the models
 
-
-def mypaths():
-    basedir = os.path.abspath(os.path.dirname(__file__))
-    rootdir = os.path.abspath(os.path.join(basedir, '..', '..', '..'))
-    database_dir  = os.path.join(rootdir, 'database')
-    database_path = os.path.join(database_dir, 'Sellers_Hub.db')
-    return database_path
-db_path = mypaths()
 
 app = Flask(__name__)           # Flask application object
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)            # SQLAlchemy database object
+db.init_app(app)  # Initialize the db object with the app
 migrate = Migrate(app, db)      # Flask-Migrate object
-
-class Client(db.Model):
-    client_CPF_ID = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50))
-    phone_number = db.Column(db.String(20))
-    email = db.Column(db.String(50))
-    physical_address = db.Column(db.String(100))
-    birthday = db.Column(db.Date)
-    additional_information = db.Column(db.Text)
-
-class Company(db.Model):
-    company_CNPJ_ID = db.Column(db.Integer, primary_key=True)
-    company_owner = db.Column(db.Integer, nullable=False)
-    client_CPF_ID = db.Column(db.Integer, db.ForeignKey('client.client_CPF_ID'))
-
-class Contract(db.Model):
-    contract_id = db.Column(db.Integer, primary_key=True)
-    contract_type = db.Column(db.String(50), nullable=False)
-    administrator = db.Column(db.String(50))
-    operator = db.Column(db.String(50))
-    contract_plan = db.Column(db.String(50), nullable=False)
-    data_inicio = db.Column(db.DateTime)
-    data_fim = db.Column(db.DateTime)
-    valor_contrato = db.Column(db.Numeric(10, 2))
-    client_CPF_ID = db.Column(db.Integer, db.ForeignKey('client.client_CPF_ID'))
-
-class Transaction(db.Model):
-    transaction_id = db.Column(db.Integer, primary_key=True)
-    first_pay_value = db.Column(db.Numeric(10, 2), nullable=False)
-    extra_pay_value = db.Column(db.Numeric(10, 2))
-    client_CPF_ID = db.Column(db.Integer, db.ForeignKey('client.client_CPF_ID'))
-
 
 @app.route('/')
 def hello():

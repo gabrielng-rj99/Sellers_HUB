@@ -1,5 +1,6 @@
 CREATE TABLE clients (
-  client_CPF_ID INTEGER PRIMARY KEY,
+  client_ID INTEGER PRIMARY KEY,
+  client_CPF INTEGER,
   first_name VARCHAR NOT NULL,
   last_name VARCHAR,
   phone_number INTEGER,
@@ -12,7 +13,7 @@ CREATE TABLE clients (
 CREATE TABLE company (
   company_CNPJ_ID INTEGER PRIMARY KEY,
   company_owner INTEGER NOT NULL,
-  FOREIGN KEY (company_owner) REFERENCES clients(client_CPF_ID)
+  FOREIGN KEY (company_owner) REFERENCES clients(client_ID)
 );
 
 CREATE TABLE contracts (
@@ -24,14 +25,22 @@ CREATE TABLE contracts (
   data_inicio DATETIME,
   data_fim DATETIME,
   valor_contrato DECIMAL(10,2),
-  client_CPF_ID INTEGER NOT NULL,
-  FOREIGN KEY (client_CPF_ID) REFERENCES clients(client_CPF_ID)
+  client_ID INTEGER NOT NULL,
+  FOREIGN KEY (client_ID) REFERENCES clients(client_ID)
 );
 
 CREATE TABLE transaction (
   transaction_id INTEGER PRIMARY KEY,
   first_pay_value DECIMAL(10,2) NOT NULL,
   extra_pay_value DECIMAL(10,2),
-  client_CPF_ID INTEGER NOT NULL,
-  FOREIGN KEY (client_CPF_ID) REFERENCES clients(client_CPF_ID)
+  client_ID INTEGER NOT NULL,
+  FOREIGN KEY (client_ID) REFERENCES clients(client_ID)
+);
+
+CREATE TABLE agenda (
+  event_id INTEGER PRIMARY KEY,
+  client_ID INTEGER NOT NULL,
+  date_hour DATETIME NOT NULL,
+  description TEXT,
+  FOREIGN KEY (client_ID) REFERENCES clients(client_ID)
 );
