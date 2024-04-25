@@ -13,6 +13,7 @@ CREATE TABLE clients (
 CREATE TABLE company (
   company_CNPJ_ID INTEGER PRIMARY KEY,
   company_owner INTEGER NOT NULL,
+  company_name VARCHAR NOT NULL,
   FOREIGN KEY (company_owner) REFERENCES clients(client_ID)
 );
 
@@ -33,6 +34,7 @@ CREATE TABLE transaction (
   transaction_id INTEGER PRIMARY KEY,
   first_pay_value DECIMAL(10,2) NOT NULL,
   extra_pay_value DECIMAL(10,2),
+  transaction_date DATETIME NOT NULL,
   client_ID INTEGER NOT NULL,
   FOREIGN KEY (client_ID) REFERENCES clients(client_ID)
 );

@@ -4,9 +4,9 @@ from sqlalchemy.orm import relationship
 
 class Client(db.Model):
     client_ID = db.Column(Integer, primary_key=True)
-    client_CPF = db.Column(Integer)
     first_name = db.Column(String(50), nullable=False)
     last_name = db.Column(String(50))
+    client_CPF = db.Column(Integer)
     phone_number = db.Column(String(20))
     email = db.Column(String(50))
     physical_address = db.Column(String(100))
@@ -16,6 +16,7 @@ class Client(db.Model):
 class Company(db.Model):
     company_CNPJ_ID = db.Column(Integer, primary_key=True)
     company_owner = db.Column(Integer, nullable=False)
+    company_name = db.Column(String(50), nullable=False)
     client_ID = db.Column(Integer, ForeignKey('client.client_ID'))
 
 class Contract(db.Model):
@@ -33,6 +34,7 @@ class Transaction(db.Model):
     transaction_id = db.Column(Integer, primary_key=True)
     first_pay_value = db.Column(Numeric(10, 2), nullable=False)
     extra_pay_value = db.Column(Numeric(10, 2))
+    transaction_date = db.Column(DateTime, nullable=False)
     client_ID = db.Column(Integer, ForeignKey('client.client_ID'))
 
 class Agenda(db.Model):
