@@ -1,8 +1,7 @@
 from directories import *
 from flask import Flask
 from flask_migrate import Migrate
-from models import *  # Import the models
-from backend.src.app.database import db
+from models import *  # Import the models and db
 
 app = Flask(__name__)       # Flask application object
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path

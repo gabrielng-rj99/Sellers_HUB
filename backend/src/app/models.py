@@ -1,6 +1,8 @@
-from backend.src.app.database import db
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String, Date, Numeric, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
+
+db = SQLAlchemy() 
 
 class Client(db.Model):
     client_ID = db.Column(Integer, primary_key=True)
