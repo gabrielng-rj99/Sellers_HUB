@@ -5,3 +5,4 @@ flask-migrate==4.0.7
 requests==2.31.0
 py3-validate-email==1.0.5.post1
 phonenumbers==8.13.35
+cryptography==42.0.5
